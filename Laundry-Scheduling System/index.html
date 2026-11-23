@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wash 'N' Dry — Laundry Task Scheduling System</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Wash 'N' Dry Logo Loading Screen -->
+  <div id="loading-screen" class="loading-screen" aria-label="Loading Wash 'N' Dry">
+    <div class="loader-card">
+      <div class="loader-ring-wrap">
+        <div class="loader-ring"></div>
+        <div class="loader-logo-circle">
+          <img src="logo.png" alt="Wash 'N' Dry Logo" />
+        </div>
+      </div>
+      <div class="loader-title">WASH 'N' DRY</div>
+      <div class="loader-sub">Preparing Laundry Scheduler...</div>
+      <div class="loader-bar">
+        <div class="loader-bar-fill"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="app-shell">
+    <!-- Far-Left Vibrant Icon Rail -->
+    <aside class="icon-rail" aria-label="Primary Navigation">
+      <div class="rail-top">
+        <div class="brand-logo" title="Wash 'N' Dry Laundry Services">
+          <img src="logo.png" alt="Wash 'N' Dry Logo" />
+        </div>
+
+        <button id="btn-rail-add" class="rail-add-btn" type="button" title="Create New Task">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+          <span class="rail-label">New Task</span>
+        </button>
+
+        <nav class="rail-nav">
+          <button class="rail-btn active" data-view="board" type="button" title="Task Board">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+              <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+              <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+              <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+            </svg>
+            <span class="rail-label">Board</span>
+          </button>
+          <button class="rail-btn" data-view="employees" type="button" title="Employees (3 Staff)">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+            <span class="rail-label">Staff</span>
+          </button>
+          <button class="rail-btn" data-view="machines" type="button" title="Machines (4 Washers, 4 Dryers)">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="2" width="18" height="20" rx="2"></rect>
+              <circle cx="12" cy="13" r="5"></circle>
+              <line x1="7" y1="6" x2="7.01" y2="6"></line>
+              <line x1="11" y1="6" x2="11.01" y2="6"></line>
+            </svg>
+            <span class="rail-label">Machines</span>
+          </button>
+          <button class="rail-btn" data-view="queue" type="button" title="FCFS Queues (Employee, Washer, Dryer)">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+            <span class="rail-label">Queues</span>
+          </button>
+          <button class="rail-btn" data-view="orders" type="button" title="Orders &amp; Receipts">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <path d="M16 10a4 4 0 0 1-8 0"></path>
+            </svg>
+            <span class="rail-label">Orders</span>
+          </button>
+          <button class="rail-btn" data-view="reports" type="button" title="Daily Summary &amp; Reports">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="20" x2="18" y2="10"></line>
+              <line x1="12" y1="20" x2="12" y2="4"></line>
+              <line x1="6" y1="20" x2="6" y2="14"></line>
+            </svg>
+            <span class="rail-label">Reports</span>
+          </button>
+          <button class="rail-btn" data-view="log" type="button" title="Activity Log">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+            </svg>
+            <span class="rail-label">History</span>
+          </button>
+        </nav>
+      </div>
+
+      <div class="rail-bottom">
+        <button id="btn-reset" class="rail-btn" type="button" title="Reset System">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="23 4 23 10 17 10"></polyline>
+            <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+          </svg>
+          <span class="rail-label">Reset</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Secondary Tinted Sidebar -->
+    <aside class="side-panel">
+      <div class="side-header">
+        <h2>Laundry Tasks</h2>
+      </div>
+
+      <ul class="filter-menu" id="sidebar-filters">
+        <li class="filter-item" data-filter="Pending">
+          <span>Pending</span>
+          <span class="count-pill pill-amber" id="count-pending">0</span>
+        </li>
+        <li class="filter-item active" data-filter="Washing">
+          <span>Washing</span>
+          <span class="count-pill pill-cyan" id="count-washing">0</span>
+        </li>
+        <li class="filter-item" data-filter="Drying">
+          <span>Drying</span>
+          <span class="count-pill pill-orange" id="count-drying">0</span>
+        </li>
+        <li class="filter-item" data-filter="Folding/Packing">
+          <span>Folding / Packing</span>
+          <span class="count-pill pill-teal" id="count-folding">0</span>
+        </li>
+        <li class="filter-item" data-filter="Completed">
+          <span>Completed</span>
+          <span class="count-pill pill-emerald" id="count-completed">0</span>
+        </li>
+      </ul>
+
+      <div class="side-divider"></div>
+
+      <div class="side-section-title">Staff Availability</div>
+      <div id="sidebar-employees" class="sidebar-employees"></div>
+
+      <div class="side-divider"></div>
+
+      <div class="side-section-title">Machines Status</div>
+      <div id="sidebar-machines" class="sidebar-machines"></div>
+    </aside>
+
+    <!-- Main Workspace -->
+    <div class="workspace">
+      <!-- Top Search & Notification Bar -->
+      <header class="topbar">
+        <div class="search-box">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input id="search-input" type="text" placeholder="Search task, employee, or machine..." />
+        </div>
+
+        <div class="topbar-right">
+          <div class="threshold-pill" title="Supervisor alert wait threshold in seconds">
+            <span>Wait Alert:</span>
+            <input id="wait-threshold" type="number" min="5" max="3600" value="20" />
+            <span>sec</span>
+          </div>
+
+          <button id="btn-sound-toggle" class="icon-circle-btn" type="button" title="Toggle Sound Alerts">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+              <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+            </svg>
+          </button>
+
+          <button id="btn-notif-bell" class="icon-circle-btn" type="button" title="View Activity Log">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+              <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+            </svg>
+            <span id="bell-dot" class="notif-dot hidden"></span>
+          </button>
+
+          <div class="supervisor-chip" title="Supervisor Mode Active">
+            <span class="avatar avatar-sup">S</span>
+            <span>Supervisor</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- Supervisor Alert Banner -->
+      <div id="supervisor-alert-banner" class="alert-banner hidden" role="alert">
+        <div>
+          <strong>Supervisor Alert:</strong>
+          <span id="supervisor-alert-text">All employees have been busy for too long. Tasks are waiting in the queue.</span>
+        </div>
+        <button id="btn-dismiss-alert" class="btn btn-small btn-light" type="button">Dismiss</button>
+      </div>
+
+      <!-- View: Task Board -->
+      <main id="view-board" class="main-content">
+        <div class="content-header">
+          <div>
+            <h1 id="board-heading">Wash</h1>
+            <p id="board-subtitle" class="subtitle">Assigned to Washer 1–4</p>
+          </div>
+          <div class="content-controls">
+            <button id="btn-open-create" class="btn btn-gradient" type="button">+ New Laundry Task</button>
+          </div>
+        </div>
+
+        <div id="tasks-grid" class="tasks-grid"></div>
+      </main>
+
+      <!-- View: Employees (3 Staff) -->
+      <main id="view-employees" class="main-content hidden">
+        <div class="content-header">
+          <div>
+            <h1>Staff &amp; Shift Management</h1>
+            <p class="subtitle">Employees are Unavailable only while actively handling or folding a task</p>
+          </div>
+        </div>
+        <div id="employees-grid" class="employees-grid-cards"></div>
+      </main>
+
+      <!-- View: Machines (4 Washers, 4 Dryers) -->
+      <main id="view-machines" class="main-content hidden">
+        <div class="content-header">
+          <div>
+            <h1>Machines (4 Washers, 4 Dryers)</h1>
+            <p class="subtitle">Automatic machine matching, utilization tracking, and breakdown recovery</p>
+          </div>
+        </div>
+
+        <h2 class="section-subheading">Washers (4)</h2>
+        <div id="washers-grid" class="board-machines-grid"></div>
+
+        <h2 class="section-subheading">Dryers (4)</h2>
+        <div id="dryers-grid" class="board-machines-grid"></div>
+      </main>
+
+      <!-- View: Separate FCFS Queues -->
+      <main id="view-queue" class="main-content hidden">
+        <div class="content-header">
+          <div>
+            <h1>First-Come-First-Served Queues</h1>
+            <p class="subtitle">Separate queues for Washers, Dryers, and Employees</p>
+          </div>
+          <span id="queue-count" class="count-pill pill-amber">0 Waiting</span>
+        </div>
+
+        <div class="queues-columns">
+          <section class="queue-column">
+            <div class="queue-col-header">
+              <h3>Washer Queue</h3>
+              <span id="washer-queue-count" class="count-pill pill-cyan">0</span>
+            </div>
+            <div id="washer-queue-list" class="queue-list-col"></div>
+          </section>
+
+          <section class="queue-column">
+            <div class="queue-col-header">
+              <h3>Dryer Queue</h3>
+              <span id="dryer-queue-count" class="count-pill pill-orange">0</span>
+            </div>
+            <div id="dryer-queue-list" class="queue-list-col"></div>
+          </section>
+
+          <section class="queue-column">
+            <div class="queue-col-header">
+              <h3>Employee Queue</h3>
+              <span id="employee-queue-count" class="count-pill pill-indigo">0</span>
+            </div>
+            <div id="employee-queue-list" class="queue-list-col"></div>
+          </section>
+        </div>
+      </main>
+
+      <!-- View: Orders & Receipts -->
+      <main id="view-orders" class="main-content hidden">
+        <div class="content-header">
+          <div>
+            <h1>Orders &amp; Receipts</h1>
+            <p class="subtitle">Grouped customer orders, payment status (Paid / Unpaid), and printable claim stubs</p>
+          </div>
+          <button id="btn-export-orders" class="btn btn-soft" type="button">Export Orders CSV</button>
+        </div>
+        <div id="orders-grid" class="tasks-grid"></div>
+      </main>
+
+      <!-- View: Daily Summary & Reports -->
+      <main id="view-reports" class="main-content hidden">
+        <div class="content-header">
+          <div>
+            <h1>Daily Summary &amp; Reports</h1>
+            <p class="subtitle">Today's revenue, total weight, staff workload, and machine utilization</p>
+          </div>
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <button id="btn-export-log" class="btn btn-soft" type="button">Export Activity CSV</button>
+            <button id="btn-end-of-day" class="btn btn-danger" type="button">End of Day (Reset Daily Counters)</button>
+          </div>
+        </div>
+        <div id="reports-kpis" class="kpi-grid"></div>
+        <div id="reports-breakdown" class="queues-columns"></div>
+      </main>
+
+      <!-- View: Activity Log -->
+      <main id="view-log" class="main-content hidden">
+        <div class="content-header">
+          <div>
+            <h1>Activity Log</h1>
+            <p class="subtitle">Tracks every employee and machine handoff with start and finish times</p>
+          </div>
+          <span id="log-count" class="count-pill pill-indigo">0 Entries</span>
+        </div>
+        <div class="table-card">
+          <table class="log-table">
+            <thead>
+              <tr>
+                <th>Log #</th>
+                <th>Task</th>
+                <th>Stage / Type</th>
+                <th>Employee</th>
+                <th>Machine</th>
+                <th>Start Time</th>
+                <th>Finish Time</th>
+                <th>Notes</th>
+              </tr>
+            </thead>
+            <tbody id="activity-log-body"></tbody>
+          </table>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Create Task Modal -->
+  <div id="create-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="create-modal-title">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="create-modal-title">Create New Laundry Task</h3>
+        <button id="btn-close-create" class="close-x" type="button" aria-label="Close">&times;</button>
+      </div>
+      <p class="modal-subtitle">Auto-assignment runs only after task details are fully saved.</p>
+      <form id="task-form" class="task-form">
+        <div class="form-row-2">
+          <div class="form-group">
+            <label for="order-number">Order Number (Auto)</label>
+            <input id="order-number" type="text" readonly />
+          </div>
+          <div class="form-group">
+            <label for="customer-name">Customer Name</label>
+            <input id="customer-name" type="text" placeholder="e.g., Juan Dela Cruz" required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="task-title">Task Title / Load Type</label>
+          <input id="task-title" type="text" placeholder="e.g., Wash &amp; Dry - Whites" required />
+        </div>
+        <div class="form-group">
+          <label for="task-details">Task Details / Instructions</label>
+          <textarea id="task-details" rows="2" placeholder="e.g., Cold wash, gentle wash, fold neatly" required></textarea>
+        </div>
+        <div class="form-row-2">
+          <div class="form-group">
+            <label for="task-kg">Weight (kg) — Max 6 kg/load</label>
+            <input id="task-kg" type="number" min="1" max="100" step="0.5" value="6" required />
+          </div>
+          <div class="form-group">
+            <label for="created-by">Entered By</label>
+            <select id="created-by">
+              <option value="1">Employee 1</option>
+              <option value="2">Employee 2</option>
+              <option value="3">Employee 3</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row-2">
+          <div class="form-group">
+            <label for="addon-fee">Add-on Fee (₱) — Optional</label>
+            <input id="addon-fee" type="number" min="0" step="1" value="0" placeholder="e.g., 20 for extra fabcon" />
+          </div>
+          <div class="form-group" style="justify-content:flex-end;">
+            <label class="checkbox-label">
+              <input id="is-rush" type="checkbox" />
+              <span>Priority / Rush Order (Front of Queue)</span>
+            </label>
+          </div>
+        </div>
+        <div id="order-summary" class="order-summary-box">
+          <div><strong>Loads:</strong> <span id="summary-loads">1 load (6 kg)</span></div>
+          <div><strong>Total Price (₱33/kg):</strong> <span id="summary-price">₱198.00</span></div>
+        </div>
+        <div class="modal-actions">
+          <button id="btn-cancel-create" class="btn btn-soft" type="button">Cancel</button>
+          <button type="submit" class="btn btn-gradient">Save Task &amp; Auto-Assign</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Supervisor Manual Override Modal -->
+  <div id="override-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="override-modal-title">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="override-modal-title">Supervisor Manual Override</h3>
+        <button id="btn-close-override" class="close-x" type="button" aria-label="Close">&times;</button>
+      </div>
+      <p id="override-task-info" class="modal-subtitle"></p>
+      <div class="form-group" id="override-employee-group">
+        <label for="override-employee">Reassign Employee</label>
+        <select id="override-employee">
+          <option value="1">Employee 1</option>
+          <option value="2">Employee 2</option>
+          <option value="3">Employee 3</option>
+        </select>
+      </div>
+      <div class="form-group hidden" id="override-machine-group">
+        <label for="override-machine">Reassign Machine</label>
+        <select id="override-machine"></select>
+      </div>
+      <div class="form-group">
+        <label for="override-reason">Reason</label>
+        <input id="override-reason" type="text" value="Supervisor manual reassignment" />
+      </div>
+      <div class="modal-actions">
+        <button id="btn-cancel-override" class="btn btn-soft" type="button">Cancel</button>
+        <button id="btn-confirm-override" class="btn btn-gradient" type="button">Confirm Reassign</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Printable Receipt Modal -->
+  <div id="receipt-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="receipt-modal-title">
+    <div class="modal-content receipt-modal-content">
+      <div class="modal-header no-print">
+        <h3 id="receipt-modal-title">Customer Claim Stub / Receipt</h3>
+        <button id="btn-close-receipt" class="close-x" type="button" aria-label="Close">&times;</button>
+      </div>
+      <div id="receipt-body" class="receipt-paper"></div>
+      <div class="modal-actions no-print">
+        <button id="btn-cancel-receipt" class="btn btn-soft" type="button">Close</button>
+        <button id="btn-print-receipt" class="btn btn-gradient" type="button">Print Receipt</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
